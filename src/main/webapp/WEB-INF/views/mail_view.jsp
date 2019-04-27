@@ -1,44 +1,108 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<script>
-		$(function() {
-			$("#update").click(function() {
-				let id = ${mail.id}
-				location.href = "<c:url value='/update' />" + "?id=" + id
-			})
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ include file="/WEB-INF/views/include/include_head.jspf"%>
+<style>
+fieldset {
+	margin: 20px auto; /* 가로방향 중앙정렬 */
+	display: flex;
+	flex-direction: column;
+	padding: 1em;
+	font-size:15px;
+}
 
-			$("#delete").click(function() {
-				let id = ${mail.id}
-				location.replace("<c:url value='/delete' />" + "?id=" + id)
-			})
+legend {
+	font-weight: bold;
+	color: #3d65ff;
+	font-size:15px;
+}
+
+div {
+	display: flex;
+}
+
+label {
+	display: inline-block;
+	width: 20%;
+	text-align: right;
+	margin-right: 5px;
+	padding: 8px;
+	font-size:15px;
+}
+
+input, textarea {
+	display: inline-block;
+	width: 70%;
+	padding: 8px;
+	margin: 3px;
+	font-size:15px;
+}
+
+.btn.send {
+	background-color: #84ac67;
+}
+.btn.list {
+	background-color: #84ac67;
+}
+
+.btn:hover {
+	background-color: #ddd;
+}
+</style>
+<script>
+	$(function() {
+		$("#mail_list").click(function() {
+			location.replace("<c:url value='/' />")
 		})
-	</script>
+	})
+</script>
 <body>
 	<header>
-		<h3>이메일 보내기</h3>
+		<h3>Email 관리 시스템</h3>
 	</header>
 	<section>
-		<article class="detail-box">
-			<p>보내는 사람: ${mail.from_email }
-			<p>받는 사람: ${mail.to_email }
-			<p>제목 : ${mail.s_subject}
-			<p>내용 : ${mail.s_content}
-			<p>첨부파일</p>
-
-			<p><img src="<c:url value='/files/' />${mail.s_file1}">
-			<p><img src="<c:url value='/files/' />${mail.s_file2}">
-			<p><button type="button" id="update">편집</button>
-				<button type="button" id="delete">삭제</button></article>
-
+		<article>
+			<form:form action="save" enctype="multipart/form-data"
+				modelAttribute="mailVO" id="mail_form">
+				<fieldset>
+					<legend>Email 작성</legend>
+					<div>
+					<label for="s_date">작성일자</label>
+					<form:input type="text" id="s_date" path="s_date"/>
+					</div>
+					<div>
+					<label for="s_time">작성시각</label>
+					<form:input type="text" id="s_time" path="s_time"/>
+					</div>
+					<div>
+						<label for="from_email">보내는 Email</label>
+						<form:input type="text" id="from_email" path="from_email" />
+					</div>
+					<div>
+						<label for="to_email">받는 Email</label>
+						<form:input type="text" id="to_email" path="to_email" />
+					</div>
+					<div>
+						<label for="s_subject">메일 제목</label>
+						<form:input type="text" id="s_subject" path="s_subject" />
+					</div>
+					<div>
+						<label for="s_content">메일내용</label>
+						<form:textarea rows="10" id="s_content" path="s_content" />
+					</div>
+					<div>
+						<label for="files"></label> <input type="file" name="files"
+							id="files" multiple="multiple">
+					</div>
+					<div>
+						<label for="mail_save"></label>
+						<button type="submit" id="mail_save" class="btn send">메일
+							보내기</button>
+						<button type="button" id="mail_list" class="btn list">목록으로</button>
+					</div>
+				</fieldset>
+			</form:form>
+		</article>
 	</section>
 </body>
-
-</html>
